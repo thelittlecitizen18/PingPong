@@ -4,7 +4,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Client
+
+namespace Client2
 {
     class Program
     {
@@ -32,31 +33,14 @@ namespace Client
                 sender.Send(msg);
                 var task = Task.Factory.StartNew(obj =>
                 {
+
                     int backmsg = sender.Receive(bytes1);
                     string msg2 = Encoding.ASCII.GetString(bytes1, 0, backmsg);
                     Console.WriteLine(msg2);
                 }, sender
                 );
-             
+                
             }
-
-
-
-
-
-
-
-
-
-            //int bytesSent = sender.Send(msg);
-            //int bytesRec = sender.Receive(bytes);
-            //Console.WriteLine("Echoed test = {0}",
-            //    Encoding.ASCII.GetString(bytes, 0, bytesRec));
-            //sender.Shutdown(SocketShutdown.Both);
-            //sender.Close();
-
-
-
 
         }
     }
