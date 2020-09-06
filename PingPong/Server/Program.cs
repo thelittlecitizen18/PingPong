@@ -16,19 +16,18 @@ namespace Server
             IPHostEntry host = Dns.GetHostEntry("localhost");
             IPAddress ipAddress = host.AddressList[0];
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
-           
+
 
 
             Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-         
+
             listener.Bind(localEndPoint);
-             
+
             listener.Listen(10);
 
-          
             Console.WriteLine("Waiting for a connection...");
-            
-            
+
+
             while (true)
             {
                 Socket handler = listener.Accept();
@@ -39,16 +38,22 @@ namespace Server
 
 
                         byte[] bytes = new byte[1024];
+                        if (!handler.Connected)
+                            break;
                         int bytesRec = handler.Receive(bytes);
+                        if (bytesRec == 0)
+                            break;
                         string data = Encoding.ASCII.GetString(bytes, 0, bytesRec);
                         Console.WriteLine("Return {0}", data);
                         byte[] msg = Encoding.ASCII.GetBytes(data);
                         handler.Send(msg);
+
+
                     }
-                }, listener
-                ); 
-            } 
-            
+                }, listener 
+                );
+            }
+
 
 
 

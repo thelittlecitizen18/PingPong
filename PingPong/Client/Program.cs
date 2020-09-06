@@ -22,30 +22,32 @@ namespace Client
             Console.WriteLine("Socket connected to {0}",
                 sender.RemoteEndPoint.ToString());
 
-            
+
 
             while (true)
             {
                 byte[] bytes1 = new byte[1024];
                 Console.WriteLine("Write a message:");
-                byte[] msg = Encoding.ASCII.GetBytes(Console.ReadLine());
+                string recivedMsg = Console.ReadLine();
+                byte[] msg = Encoding.ASCII.GetBytes(recivedMsg);
                 sender.Send(msg);
                 var task = Task.Factory.StartNew(obj =>
                 {
+
                     int backmsg = sender.Receive(bytes1);
                     string msg2 = Encoding.ASCII.GetString(bytes1, 0, backmsg);
                     Console.WriteLine(msg2);
                 }, sender
                 );
-             
+                if (recivedMsg == "Break")
+                {
+                    break;
+                }
+
             }
 
-
-
-
-
-
-
+            sender.Shutdown(SocketShutdown.Send);
+            sender.Close();
 
 
             //int bytesSent = sender.Send(msg);
