@@ -3,6 +3,8 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Client
 {
@@ -23,12 +25,22 @@ namespace Client
                 sender.RemoteEndPoint.ToString());
 
 
+             Person MakeNewPerson()
+            {
+                Console.WriteLine("Please Enter A Name:");
+                string name = Console.ReadLine();
+                Console.WriteLine("Please Enter An age:");
+                int age = Convert.ToInt32(Console.ReadLine());
+                Person person = new Person(name, age);
+                return person;
+            }
+           
 
             while (true)
-            {
+            { 
                 byte[] bytes1 = new byte[1024];
                 Console.WriteLine("Write a message:");
-                string recivedMsg = Console.ReadLine();
+                string recivedMsg = MakeNewPerson().ToString();
                 byte[] msg = Encoding.ASCII.GetBytes(recivedMsg);
                 sender.Send(msg);
                 var task = Task.Factory.StartNew(obj =>
